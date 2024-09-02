@@ -4,7 +4,7 @@ Anthropic Claude
 Q: I would like to separate a Generative Transformer into two models: A model which digests structured data; and an NLP model.
 
 1. The first model, The NLP Encoder, accepts a string of space-delimited characters, and attempts to store it as structured data:
-Example training input: "A bushel of five apples sits in a woven basket on a table."
+Example training input: "A bushel of five apples sit in a woven basket on the table."
 Ideal (internal) representation:
 */
 
