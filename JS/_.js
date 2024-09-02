@@ -554,4 +554,35 @@ Vector operations are done using standard JavaScript array methods, which might
 be less efficient for very large vectors compared to optimized linear algebra libraries. 
 For production use with large datasets, you might want to consider using 
 a library like math.js for better performance.
+
+Normalization techniques:
+
+Normalization techniques between network layers can help mitigate 
+the vanishing gradient problem in deep neural networks. Here's a concise explanation:
+
+Vanishing Gradient Problem: In deep networks, gradients can become extremely 
+small as they're propagated backwards, leading to slow or stalled learning in earlier layers.
+Normalization's Role:
+
+* Normalizes the inputs to each layer
+* Keeps the values in a reasonable range
+* Helps maintain larger gradients during backpropagation
+
+Common Normalization Techniques:
+
+* Batch Normalization
+* Layer Normalization
+* Instance Normalization
+
+Benefits:
+
+* Stabilizes the learning process
+* Allows for higher learning rates
+* Can reduce the dependence on careful initialization
+
+Reasonings:
+
+* Prevents activation outputs from becoming too large or small
+* Ensures that gradients remain in a more optimal range during backpropagation
+
 */
