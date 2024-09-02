@@ -325,8 +325,8 @@ compiled_sequence = {
     }],
 }
 
-// sample uuid filter structure, assuming uuids are physical memory addresses, and input tokens can be recovered from the filter's weights and biases //
-
+/* A sample uuid filter structure which assumes all uuids are physical memory addresses, 
+and that input tokens can be recovered from the filter's weights and biases  */
 sample_uuid_filters_structure = 
 [
     [/* weights */ [0,10,2],    /* biases */   [14],  /* filter-attribute: false*/ 0 ], /* uuid 0x0 */
