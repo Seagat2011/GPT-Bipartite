@@ -9,3 +9,14 @@ sample_uuid_filters_structure =
     [/* weights */ [20,18,4],   /* biases */   [11],  /* filter-attribute: false*/ 0 ], /* uuid 0x3 */
     [/* weights */ [50,19,7],   /* biases */   [16],  /* filter-attribute: false*/ 0 ], /* uuid 0x4 */
 ];
+
+/*
+Provide missing features during testing, to verify
+functionality of the decoder.
+*/
+
+/*
+Example NLP_Encoder training input: "A bushel of five apples sit in a woven basket on a table."
+Example NLP_Decoder input: "How many apples sit in a woven basket on the table?"
+Example NLP_Decoder output: "Five apples sit in a woven basket on the table."
+*/
