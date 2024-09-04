@@ -11,12 +11,18 @@ sample_uuid_filters_structure =
 ];
 
 /*
-Provide missing features during testing, to verify
-functionality of the decoder.
-*/
+Example NLP_Encoder training input: "A bushel of five apples sit in a woven basket on the table."
+[65​,32​,98​,117,​115,​104,​101,​108,​32,​111,​102,​32,​102,​105,​118,​101,​32,​97,​112,​112,​108,​101,​115,​32,​115,​105,
+​116,​32,​105,​110,​32,​97,​32,​119,​111,​118,​101,​110,​32,​98,​97,​115,​107,​101,​116,​32,​111,​110,​32,​116,104,101,​32,
+​116,​97,​98,​108,​101,​46]
 
-/*
-Example NLP_Encoder training input: "A bushel of five apples sit in a woven basket on a table."
 Example NLP_Decoder input: "How many apples sit in a woven basket on the table?"
+[72,111,119,32,109,97,110,121,32,97,112,112,108,101,115,32,115,105,116,32,105,110,
+32,97,32,119,111,118,101,110,32,98,97,115,107,101,116,32,111,110,32,116,104,101,32,
+116,97,98,108,101,63]
+
 Example NLP_Decoder output: "Five apples sit in a woven basket on the table."
+[70,105,118,101,32,97,112,112,108,101,115,32,115,105,116,32,105,110,32,97,32,
+119,111,118,101,110,32,98,97,115,107,101,116,32,111,110,32,116,104,101,32,116,
+97,98,108,101,46]
 */
