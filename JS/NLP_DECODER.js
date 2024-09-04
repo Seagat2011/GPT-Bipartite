@@ -32,7 +32,7 @@ Example NLP_Decoder output: "Five apples sit in a woven basket on the table."
 97,98,108,101,46]
 */
 
-// Define the streamlined sentence structure, constructed by the NLP_ENCODER 
+// Define an example sentence structure, similar to what is constructed by the NLP_ENCODER. 
 const sentenceStructure = {
     subject: {
         quantity: {
