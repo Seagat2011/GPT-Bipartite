@@ -55,6 +55,30 @@ const sentenceStructure = {
     ]
 };
 
+/*
+const sentenceStructure = {
+    0x01: {
+        0x02: {
+        0x03: 'bushel',
+        0x04: 'one' // Implied
+        },  
+        0x05: 'apples',
+        0x06: 'five'
+    },
+    0x07: 'sit',
+    0x08: [
+        {
+        0x09: 'in',
+        0x0A: [/*0x0B* /'a', /*0x0C; comma-delimited* /'woven', /*0x05* /'basket']
+      },
+      {
+      0x09: 'on',
+      0x0A: [/*0x0B* /'the', /*0x05* /'table']
+      }
+  ]
+};
+*/
+
 // Assume we have a corpus of sentence structures
 const corpus = [sentenceStructure];
 
