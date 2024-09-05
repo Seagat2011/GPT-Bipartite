@@ -88,7 +88,7 @@ query: "How many apples sit in a woven basket on the table?"
 response: "Five apples sit in a woven basket on the table."
 */
 
-/* Deprecated: An efficient corpus search is needed, first
+/* Deprecated: An efficient corpus search is first needed.
 // Function to query the sentence structure
 function querySentence(query) {
     const words = query.toLowerCase().split(' ');
@@ -132,6 +132,51 @@ const subjectIndex = new Map();
 const verbIndex = new Map();
 const objectIndex = new Map();
 
+function querySentence(query) {
+  if (!isQueryAnswerable(query)) {
+    return "I'm sorry, I don't have enough information to answer that question.";
+  }
+
+  const words = query
+    .toLowerCase()
+        .match(/\S+/g);
+  const questionWord = words[0];
+  const lastIndexZ = words.length - 1;
+  const targetNoun = words[lastIndexZ];
+
+  if (questionWord === 'how' 
+        && words[1] === 'many') {
+    const relevantSentences = Array
+        .from(subjectIndex.get(targetNoun))
+            .map(index => sentenceIndex.get(index));
+    
+    // For simplicity, we'll just use the first relevant sentence
+    const sentence = relevantSentences[0];
+    return `${sentence.subject.modifier} ${sentence.subject.noun} ${sentence.verb} ${constructPrepPhrases(sentence.prepositionalPhrases)}.`;
+  }
+
+  // Handle other types of questions...
+
+  return "I'm sorry, I couldn't find a specific answer to that question.";
+} // querySentence(query)
+
+function isQueryAnswerable(query) {
+  const words = query.toLowerCase().split(' ');
+  const questionWord = words[0];
+  const lastIndexZ = words.length - 1;
+  const targetNoun = words[lastIndexZ];
+
+  if (questionWord === 'how' && words[1] === 'many') {
+    // Check if we have any sentences with the target noun as subject
+    return subjectIndex.has(targetNoun);
+  }
+
+  // Add more conditions for other types of questions
+  // ...
+
+  return false;
+} // end isQueryAnswerable(query) 
+
 function buildIndexes(corpus) {
   corpus.forEach((sentence, index) => {
     // Index by subject noun
@@ -160,59 +205,16 @@ function buildIndexes(corpus) {
     // Store the full sentence structure
     sentenceIndex.set(index, sentence);
   });
-}
+} // end buildIndexes(corpus)
 
-function isQueryAnswerable(query) {
-  const words = query.toLowerCase().split(' ');
-  const questionWord = words[0];
-  const lastIndexZ = words.length - 1;
-  const targetNoun = words[lastIndexZ];
-
-  if (questionWord === 'how' && words[1] === 'many') {
-    // Check if we have any sentences with the target noun as subject
-    return subjectIndex.has(targetNoun);
-  }
-
-  // Add more conditions for other types of questions
-  // ...
-
-  return false;
-}
-
-function querySentence(query) {
-  if (!isQueryAnswerable(query)) {
-    return "I'm sorry, I don't have enough information to answer that question.";
-  }
-
-  const words = query
-    .toLowerCase()
-        .match(/\S+/g);
-  const questionWord = words[0];
-  const lastIndexZ = words.length - 1;
-  const targetNoun = words[lastIndexZ];
-
-  if (questionWord === 'how' 
-        && words[1] === 'many') {
-    const relevantSentences = Array
-        .from(subjectIndex.get(targetNoun))
-            .map(index => sentenceIndex.get(index));
-    
-    // For simplicity, we'll just use the first relevant sentence
-    const sentence = relevantSentences[0];
-    return `${sentence.subject.modifier} ${sentence.subject.noun} ${sentence.verb} ${constructPrepPhrases(sentence.prepositionalPhrases)}.`;
-  }
-
-  // Handle other types of questions...
-
-  return "I'm sorry, I couldn't find a specific answer to that question.";
-}
-
+/*
 // Helper function (unchanged from previous version)
 function constructPrepPhrases(phrases) {
   return phrases.map(phrase => 
     `${phrase.preposition} ${phrase.object.join(' ')}`
   ).join(' ');
-}
+} // end constructPrepPhrases(phrases)
+*/
 
 // Build indexes when initializing the system
 buildIndexes(corpus);
