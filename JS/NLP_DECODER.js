@@ -223,3 +223,172 @@ buildIndexes(corpus);
 const query = "How many apples sit in a woven basket on the table?";
 console.info(isQueryAnswerable(query));
 console.info(querySentence(query));
+
+/*
+// Five apples sit in a woven basket on the table.
+// standardized compact data structure //
+[
+    [/* implied number quantity * /'one',/* noun modifier * /'bushel',[/* optional comma-delimited modifier * /'five', /* noun * / 'apples']], // subject
+    ['sit'], // verb
+    [ // prepositions
+        ['in',[/* article * /'a', /* optional comma-delimited adjectives * /'woven', /* noun * /'basket']],
+        ['on',[/* article * /'the', /* noun * /'table']],
+    ]
+]
+
+let structure = [[], [], []];  // [subject, verb, prepositions]
+
+structure[0] = [
+  'one',  // implied number quantity
+  'bushel',  // noun modifier (assumed based on previous example)
+  ['five', 'apples']  // [modifier, noun]
+];
+*/
+
+/*
+The next implementation introduces a Comprehension List and State Machine to track changes in subjects over time. Here's a breakdown of the key components:
+
+ComprehensionList class:
+
+Maintains a map of subjects and their state history.
+Provides methods to update subject states, get current states, and retrieve state history.
+Implements a simple time-tracking mechanism.
+
+
+StateMachine class:
+
+Uses the ComprehensionList to manage subject states.
+Processes sentences, updates states, and handles queries.
+The processSentence method parses the input and updates the state.
+The updateState method extracts relevant information from the sentence structure and updates the subject's state in the ComprehensionList.
+The query method handles different types of questions about the subjects.
+
+
+Enhanced functionality:
+
+The system now processes multiple sentences sequentially, updating subject states over time.
+It can answer questions about the current state of subjects (quantity, location, action).
+It maintains a history of state changes for each subject.
+
+
+
+Benefits of this approach:
+
+Context Awareness: The system maintains context across multiple sentences, allowing for more intelligent responses.
+Temporal Tracking: Changes to subjects are tracked over time, enabling queries about past states or changes.
+Flexible Querying: The state machine can handle various types of questions about the subjects.
+Extensibility: The structure can be easily extended to track more complex state changes or additional attributes.
+
+To further enhance this system, you could:
+
+Implement more sophisticated natural language processing for sentence parsing and query understanding.
+Add support for more complex state transitions and relationships between subjects.
+Incorporate a more advanced time model to handle explicit time references in sentences.
+Develop a system for handling conflicting or uncertain information.
+*/
+
+// Compact Sentence Structure (from previous example)
+function parseToCompactStructure(sentence) {
+  // ... (implementation from previous example)
+}
+
+// Comprehension List to track subject states
+class ComprehensionList {
+  constructor() {
+    this.subjects = new Map();
+    this.currentTime = 0;
+  }
+
+  // Update subject state
+  updateSubject(subject, state) {
+    if (!this.subjects.has(subject)) {
+      this.subjects.set(subject, []);
+    }
+    this.subjects.get(subject).push({ time: this.currentTime, state });
+  }
+
+  // Get current state of a subject
+  getSubjectState(subject) {
+    const states = this.subjects.get(subject);
+    return states ? states[states.length - 1].state : null;
+  }
+
+  // Advance time
+  advanceTime() {
+    this.currentTime++;
+  }
+
+  // Get history of a subject
+  getSubjectHistory(subject) {
+    return this.subjects.get(subject) || [];
+  }
+}
+
+// State Machine to process sentences and update Comprehension List
+class StateMachine {
+  constructor() {
+    this.comprehensionList = new ComprehensionList();
+  }
+
+  processSentence(sentence) {
+    const structure = parseToCompactStructure(sentence);
+    this.updateState(structure);
+    this.comprehensionList.advanceTime();
+    return structure;
+  }
+
+  updateState(structure) {
+    const [subject, verb, prepositions] = structure;
+    const subjectNoun = subject[2][1]; // Get the main subject noun
+    const currentState = this.comprehensionList.getSubjectState(subjectNoun) || {};
+
+    // Update subject state based on the sentence
+    currentState.quantity = subject[2][0];
+    currentState.action = verb[0];
+    currentState.location = prepositions.length > 0 ? prepositions[prepositions.length - 1][1].join(' ') : null;
+
+    this.comprehensionList.updateSubject(subjectNoun, currentState);
+  }
+
+  query(question) {
+    // Simple query processing (can be expanded)
+    const words = question.toLowerCase().split(' ');
+    const subject = words[words.length - 1];
+    const state = this.comprehensionList.getSubjectState(subject);
+
+    if (state) {
+      if (question.startsWith('how many')) {
+        return `There are ${state.quantity} ${subject}(s).`;
+      } else if (question.startsWith('where')) {
+        return `The ${subject}(s) are ${state.location}.`;
+      } else if (question.startsWith('what')) {
+        return `The ${subject}(s) are ${state.action} ${state.location}.`;
+      }
+    }
+    return "I don't have enough information to answer that question.";
+  }
+}
+
+// Example usage
+const stateMachine = new StateMachine();
+
+// Process multiple sentences
+const sentences = [
+  "Five apples sit in a woven basket on the table.",
+  "Three apples are eaten by hungry children.",
+  "The remaining apples are moved to the kitchen counter."
+];
+
+sentences.forEach(sentence => {
+  console.log("Processing:", sentence);
+  console.log("Structure:", JSON.stringify(stateMachine.processSentence(sentence), null, 2));
+  console.log("---");
+});
+
+// Query examples
+console.log(stateMachine.query("How many apples are there?"));
+console.log(stateMachine.query("Where are the apples?"));
+console.log(stateMachine.query("What are the apples doing?"));
+
+// Get history of a subject
+console.log("Apple history:", JSON.stringify(stateMachine.comprehensionList.getSubjectHistory('apples'), null, 2));
